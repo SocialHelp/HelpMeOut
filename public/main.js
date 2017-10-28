@@ -66,7 +66,11 @@ function removeChatTyping(talkid) {
 
 // This adds message to the chat log
 function addChatMessage(talkid, message) {
-
+	$("#chatlog").append("<div class=\"row message-remote-row\">\n" +
+        "                <div class=\"message\">\n" +
+        "                    " + message + "\n" +
+        "                </div>\n" +
+        "            </div>")
 }
 
 function sendMessage(talkid, message) {

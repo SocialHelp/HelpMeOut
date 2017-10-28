@@ -1,0 +1,14 @@
+{
+  "name": "HelpMeOut",
+  "version": "0.0.0",
+  "description": "#HackYeah!",
+  "main": "index.js",
+  "author": "SocialHelp",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^2.0.4"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}

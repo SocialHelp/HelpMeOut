@@ -10,6 +10,8 @@ function generate_id() {
 localStorage.user_id = generate_id();
 
 $(function() {
+	console.log("Hello!");
+
 	socket = io();
 
 	socket.on('connect', function () {
@@ -19,15 +21,15 @@ $(function() {
 	});
 
 	socket.on('disconnect', function () {
-		console.log('Disconnected');
+		console.log('you have been disconnected');
 	});
 
 	socket.on('reconnect', function () {
-		console.log('Reconnected');
+		console.log('you have been reconnected');
 	});
 
 	socket.on('reconnect_error', function () {
-		console.log('Failed to reconnect');
+		console.log('attempt to reconnect has failed');
 	});
 
     socket.on('start typing', function (talkid) {
@@ -56,7 +58,7 @@ $(function() {
 
 // Show typing indicator
 function addChatTyping(talkid) {
-
+	
 }
 
 // Removes typing indicator
@@ -67,10 +69,10 @@ function removeChatTyping(talkid) {
 // This adds message to the chat log
 function addChatMessage(talkid, message) {
 	$("#chatlog").append("<div class=\"row message-remote-row\">\n" +
-        "                <div class=\"message\">\n" +
-        "                    " + message + "\n" +
-        "                </div>\n" +
-        "            </div>")
+		"                <div class=\"message\">\n" +
+		"                    " + message + "\n" +
+		"                </div>\n" +
+		"            </div>")
 }
 
 function sendMessage(talkid, message) {
@@ -84,6 +86,7 @@ function startTyping(talkid) {
 function stopTyping(talkid) {
 	socket.emit('stop typing', talkid);
 }
+
 
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {

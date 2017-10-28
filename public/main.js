@@ -1,4 +1,5 @@
 var socket;
+var currentTalkId;
 
 function generate_id() {
 	return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/x/g, function() {
@@ -48,12 +49,28 @@ $(function() {
     });
 
 	socket.on('other side connected', function(talkid) {
+		currentTalkId = talkid;
 		console.log("Other side connected " + talkid);
 	});
 
 	socket.on('other side disconnected', function(talkid) {
 		console.log("Other side disconnected " + talkid);
 	});
+
+    $(document).keypress(function(e) {
+        if(e.which === 13) {
+            sendMessage(currentTalkId, $("#message-input").val());
+            $("#message-input").val("")
+        }
+    });
+
+    $( "#connect" ).click(function() {
+        joinCategory($("#message-input").val())
+    });
+
+    $( "#joinasexpert" ).click(function() {
+		joinAsExpert($("#message-input").val())
+    });
 });
 
 // Show typing indicator
@@ -75,8 +92,17 @@ function addChatMessage(talkid, message) {
 		"            </div>")
 }
 
+function addLocalChatMessage(message) {
+    $("#chatlog").append("<div class=\"row message-my-row\">\n" +
+        "                <div class=\"message message-my\">\n" +
+        "                    " + message + "\n" +
+        "                </div>\n" +
+        "            </div>")
+}
+
 function sendMessage(talkid, message) {
     socket.emit('new message', {talkid: talkid, message: message});
+    addLocalChatMessage(message);
 }
 
 function startTyping(talkid) {
@@ -93,6 +119,8 @@ function joinCategory(categoryName) {
 		console.log(status ? 'connected with an expert' : 'sorry, no experts available');
 		if(status)
 			console.log("Talkid: "+talkid);
+
+        currentTalkId = talkid;
 	});
 }
 

@@ -5,19 +5,43 @@
 	<title>HelpMeOut</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="help.css">
+ <!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-<!--Top -->
-<!-- Navber --> 
-<div>
-Chat come here
-</div>
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+         <div>Logo Come here</div>
+         <ul class="navbar-nav ml-auto">
+             <li class="nav-item">
+                  <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
+             </li>
+             <li class="nav-item">
+                  <a class="nav-link" href="about.html">About us</a>
+             </li>
+             <li class="nav-item">
+                  <a class="nav-link" href="chat.html">Chat</a>
+             </li>
+         </ul>
+    </nav>
+<section id="questions">
+<p>What kind of topics do you want to talk?</p>
+<button class="question">Family</button>
+<button class="question">Work</button>
+<button class="question">Money</button>
+</section>
 
-<!-- Footer -->
-	
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script type="text/javascript" src="help.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/main.js"></script>
+<section id="chatRoom">
+Chatroom come here
+
+<ul class="chat">
+<li>How are you?</li>
+<li>I'm doing good</li>
+</ul>
+</section>
+
+<script type="text/javascript" src="chat.js"></script>
 </body>
 </html>

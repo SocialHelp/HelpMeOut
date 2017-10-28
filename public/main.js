@@ -1,3 +1,9 @@
+$(".chatButton").click(function(){
+	$('#modal').addClass("show");
+	
+})
+
+
 var socket;
 
 $(function() {

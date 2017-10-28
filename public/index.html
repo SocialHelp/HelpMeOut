@@ -26,29 +26,36 @@
     </nav>
          <div class="container-fluid">
              <div class="row justify-content-md-center">
-                  <h2>Connect People</h2>
-             </div>
+                  <h2 id="modalButton">Connect People</h2></div>
+                   <div class="row justify-content-md-center"><p>Our mission is to help through conversation.</p></div>
          </div>
+
+         <!--chat button-->
+
+          <div id="chat" class="container-fluid">
+          <div class="row justify-content-md-center">
+               <h2>Go to chatroom</h2>
+
+          </div>
+          <div class="row justify-content-md-center">
+              <a href="chat.html" alt="chatroom"> <button class="chatButton" >Open Chat</button></a>
+          </div>
+     </div>
 </section>
 
 <!-- Chat -->
-<section id="chat">
-     <div class="container-fluid">
-          <div class="row justify-content-md-center">
-               <h2>Go to chatroom</h2>
-          </div>
-          <div class="row justify-content-md-center">
-               <a href="chat.html" alt="chatroom"><button>Open Chat</button></a>
-          </div>
-     </div>
+
+    
 	
-</section>
+
 
 <!-- Footer -->
-	
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js'></script>
 <script type="text/javascript" src="help.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>

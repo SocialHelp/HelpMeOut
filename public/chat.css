@@ -1,0 +1,23 @@
+body {
+    height: 100%;
+}
+
+.message {
+    padding: 8px;
+    border: #ccc solid 1px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.message-my {
+    color: #fff;
+    background-color: #6e82cc;
+}
+
+.message-remote-row {
+    justify-content: flex-start;
+}
+
+.message-my-row {
+    justify-content: flex-end;
+}

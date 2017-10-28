@@ -5,6 +5,16 @@ $(".chatButton").click(function(){
 
 
 var socket;
+var currentTalkId;
+
+function generate_id() {
+	return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/x/g, function() {
+		return (Math.random() * 16).toString(16)[0];
+	});
+}
+
+//TODO: localStorage.user_id = localStorage.user_id || generate_id();
+localStorage.user_id = generate_id();
 
 $(function() {
 	console.log("Hello!");
@@ -12,7 +22,9 @@ $(function() {
 	socket = io();
 
 	socket.on('connect', function () {
-		console.log('you have been connected');
+		console.log('Connected');
+
+		socket.emit('login', localStorage.user_id, function(status){});
 	});
 
 	socket.on('disconnect', function () {
@@ -27,13 +39,105 @@ $(function() {
 		console.log('attempt to reconnect has failed');
 	});
 
+    socket.on('start typing', function (talkid) {
+    	console.log("User started typing "+talkid);
+        addChatTyping(talkid);
+    });
 
-	socket.on('chat started', function() {
-		console.log("Chat started!");
+    socket.on('stop typing', function (talkid) {
+        console.log("User stopped typing "+talkid);
+    	removeChatTyping(talkid);
+    });
+
+    socket.on('new message', function (message) {
+        console.log("New message: " + message.talkid + " " + message.message);
+    	addChatMessage(message.talkid, message.message);
+    });
+
+	socket.on('other side connected', function(talkid) {
+		currentTalkId = talkid;
+		console.log("Other side connected " + talkid);
 	});
+
+	socket.on('other side disconnected', function(talkid) {
+		console.log("Other side disconnected " + talkid);
+	});
+
+    $(document).keypress(function(e) {
+        if(e.which === 13) {
+            sendMessage(currentTalkId, $("#message-input").val());
+            $("#message-input").val("")
+        }
+    });
+
+    $( "#connect" ).click(function() {
+        joinCategory($("#message-input").val())
+    });
+
+    $( "#joinasexpert" ).click(function() {
+		joinAsExpert($("#message-input").val())
+    });
 });
 
+<<<<<<< HEAD
 function joinCategory(categoryName)
 {
 	socket.emit('join category', categoryName);
+=======
+// Show typing indicator
+function addChatTyping(talkid) {
+	
+}
+
+// Removes typing indicator
+function removeChatTyping(talkid) {
+
+}
+
+// This adds message to the chat log
+function addChatMessage(talkid, message) {
+	$("#chatlog").append("<div class=\"row message-remote-row\">\n" +
+		"                <div class=\"message\">\n" +
+		"                    " + message + "\n" +
+		"                </div>\n" +
+		"            </div>")
+}
+
+function addLocalChatMessage(message) {
+    $("#chatlog").append("<div class=\"row message-my-row\">\n" +
+        "                <div class=\"message message-my\">\n" +
+        "                    " + message + "\n" +
+        "                </div>\n" +
+        "            </div>")
+}
+
+function sendMessage(talkid, message) {
+    socket.emit('new message', {talkid: talkid, message: message});
+    addLocalChatMessage(message);
+}
+
+function startTyping(talkid) {
+	socket.emit('start typing', talkid);
+}
+
+function stopTyping(talkid) {
+	socket.emit('stop typing', talkid);
+}
+
+
+function joinCategory(categoryName) {
+	socket.emit('join category', categoryName, function(status, talkid) {
+		console.log(status ? 'connected with an expert' : 'sorry, no experts available');
+		if(status)
+			console.log("Talkid: "+talkid);
+
+        currentTalkId = talkid;
+	});
+}
+
+function joinAsExpert(categoryName) {
+	socket.emit('join expert', categoryName, function (status) {
+		console.log(status ? 'you have joined as an expert' : 'failed');
+	});
+>>>>>>> be7091e4c47f4f1404105e1afc062764d57ce962
 }

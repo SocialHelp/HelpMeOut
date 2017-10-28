@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< HEAD
 	<meta charset="UTF-8">
 	<title>HelpMeOut</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
@@ -43,5 +44,49 @@ Chatroom come here
 </section>
 
 <script type="text/javascript" src="chat.js"></script>
+=======
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>HelpMeOut</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="chat.css">
+</head>
+<body>
+
+<div class="card text-center" style="border-bottom: 0">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Back</a>
+            </li>
+            <li class="nav-item">
+                <a id="connect" class="nav-link" href="#">Connect</a>
+            </li>
+            <li class="nav-item">
+                <a id="joinasexpert" class="nav-link" href="#">Join as expert</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div id="chatlog">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="form-group" style="position: fixed;bottom: 0;width: 100%;">
+    <input class="form-control" id="message-input" type="text"/>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="help.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/main.js"></script>
+>>>>>>> be7091e4c47f4f1404105e1afc062764d57ce962
 </body>
 </html>

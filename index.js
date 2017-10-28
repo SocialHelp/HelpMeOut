@@ -97,9 +97,17 @@ io.on('connection', function (socket) {
 		return callback(true);
 	});
 
+	socket.on('disconnecting', function() { // Because room list is unavailable in 'disconnected'
+		Object.keys(socket.rooms).forEach(function(room) {
+			if(room.indexOf("talk") !== 0)
+				return;
+			var talkid = Number(room.substr(4));
+			socket.to(room).emit('other side disconnected', talkid);
+		});
+	});
+
 	socket.on('disconnect', function() {
 		console.log("%s disconnected", socket.id);
-		//TODO: socket.to(connectedUsers[socket.id]).emit('other side disconnected');
 	});
 
 

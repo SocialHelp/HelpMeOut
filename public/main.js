@@ -52,7 +52,7 @@ $(function() {
 	});
 
 	socket.on('other side disconnected', function(talkid) {
-		console.log("Other side disconnected" + talkid);
+		console.log("Other side disconnected " + talkid);
 	});
 });
 

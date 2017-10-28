@@ -81,7 +81,6 @@ function stopTyping(talkid) {
 	socket.emit('stop typing', talkid);
 }
 
-
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {
 		console.log(status ? 'connected with an expert' : 'sorry, no experts available');

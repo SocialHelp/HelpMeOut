@@ -1,9 +1,3 @@
-$(".chatButton").click(function(){
-	$('#modal').addClass("show");
-	
-})
-
-
 var socket;
 var currentTalkId;
 
@@ -79,11 +73,6 @@ $(function() {
     });
 });
 
-<<<<<<< HEAD
-function joinCategory(categoryName)
-{
-	socket.emit('join category', categoryName);
-=======
 // Show typing indicator
 function addChatTyping(talkid) {
 	
@@ -139,5 +128,4 @@ function joinAsExpert(categoryName) {
 	socket.emit('join expert', categoryName, function (status) {
 		console.log(status ? 'you have joined as an expert' : 'failed');
 	});
->>>>>>> be7091e4c47f4f1404105e1afc062764d57ce962
 }

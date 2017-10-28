@@ -10,8 +10,6 @@ function generate_id() {
 localStorage.user_id = generate_id();
 
 $(function() {
-	console.log("Hello!");
-
 	socket = io();
 
 	socket.on('connect', function () {
@@ -21,15 +19,15 @@ $(function() {
 	});
 
 	socket.on('disconnect', function () {
-		console.log('you have been disconnected');
+		console.log('Disconnected');
 	});
 
 	socket.on('reconnect', function () {
-		console.log('you have been reconnected');
+		console.log('Reconnected');
 	});
 
 	socket.on('reconnect_error', function () {
-		console.log('attempt to reconnect has failed');
+		console.log('Failed to reconnect');
 	});
 
     socket.on('start typing', function (talkid) {
@@ -58,7 +56,7 @@ $(function() {
 
 // Show typing indicator
 function addChatTyping(talkid) {
-	
+
 }
 
 // Removes typing indicator

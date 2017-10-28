@@ -30,6 +30,10 @@ io.on('connection', function (socket) {
 			return callback(false);
 		if (socket.user_type) // Already chatting?
 			return callback(false);
+		for(var cat in waitingExperts) {
+			if(waitingExperts[cat].indexOf(socket) !== -1)
+				return callback(false);
+		}
 
 		// Check for existing talk
 		var talk = null, talkid = null, expert = null;

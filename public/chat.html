@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>HelpMeOut</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="help.css">
@@ -13,22 +14,26 @@
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 </head>
 <body>
- <nav class="navbar navbar-toggleable-md navbar-dark bg-dark">
-      <div>Logo Come here</div>
+ <div class="title">Help Me Out</div>
+<nav class="navbar navbar-toggleable-md navbar-dark bg-dark">
+     
         <ul class="navbar-nav ml-auto">
            <li class="nav-item">
                   <a class="nav-link" href="index.html">Home<span(current)</span></a>
              </li>
             <li class="nav-item">
-                 <a class="nav-link" href="about.html">About us</a>
+                 <a class="nav-link" href="about.html">About</a>
            </li>
              <li class="nav-item">
                  <a class="nav-link" href="chat.html">Chat</a>
               </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="registration.html">Register</a>
+              </li>
          </ul>
  </nav>
-<section id="questions">
-<p>What kind of topics do you want to talk?</p>
+<section id="questions" class="d-flex flex-column align-items-center">
+<p>What kind of topics do you want to talk about?</p>
 <button class="question">Family</button>
 <button class="question">Work</button>
 <button class="question">Money</button>

@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
-
+@import url('https://fonts.googleapis.com/css?family=Cantata+One|Source+Sans+Pro');
 html body {
 background-color: #f7f7f7;
 font-family: "Source Sans Pro", sans-serif;
@@ -23,24 +22,6 @@ h1 {
 }
 
 /** About **/
-.navAbout {
-	height: 30px !important;
-}
-
-.navAbout .title {
-	font-size: 7px;
-	margin-left: -10px;
-}
-
-.navAbout li {
-    font-size: 6px;
-    margin-right: -10px;
-}
-
-.navAbout li:last-child {
-	margin-right: -8px;
-	margin-right: -13px;
-}
 
 .element {
 	position: relative;
@@ -64,7 +45,6 @@ h1 {
 .overlay {
 	margin-left: -10000px;
 	text-align: center;
-
 }
 
 .element:hover .overlay{
@@ -94,6 +74,13 @@ h3 {
 }
 
 /** Top **/
+.title {
+    font-family: "Cantata One", sans-serif;
+    color: #f7f7f7;
+    background:#212428;
+    height: 5vh;
+    padding: 3px;
+}
 
 .navbar {
 	background: #5FBA30;
@@ -168,6 +155,7 @@ h3 {
 	box-shadow: 3px 3px 3px #888888;
 	margin-right: 10px;
 	margin-left: 10px;
+
 }
 
 .question {
@@ -175,6 +163,7 @@ h3 {
 	height: 50px;
 	width: 300px;
     background: #FFD657;
+    margin: auto;
 }
 
 #chatRoom {

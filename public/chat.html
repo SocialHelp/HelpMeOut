@@ -5,6 +5,7 @@
 	<title>HelpMeOut</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="help.css">
+    <link rel="stylesheet" type="text/css" href="chat.css">
  <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
@@ -25,7 +26,7 @@
                   <a class="nav-link" href="chat.html">Chat</a>
              </li>
          </ul>
-    </nav>
+   </nav>
 <section id="questions">
 <p>What kind of topics do you want to talk?</p>
 <button class="question">Family</button>
@@ -33,10 +34,8 @@
 <button class="question">Money</button>
 </section>
 
-<section id="chatRoom">
-Chatroom come here
-
-<div class="card text-center" style="border-bottom: 0">
+<section id="chatRoom" style="height: 100%;">
+<div class="card text-center" style="border-bottom: 0; height: 100%;">
     <div class="card-header">
         <ul class="nav nav-pills card-header-pills">
             <li class="nav-item">
@@ -67,6 +66,7 @@ Chatroom come here
         crossorigin="anonymous"></script>
 <script type="text/javascript" src="help.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/main.js"></script>
 <script type="text/javascript" src="chat.js"></script>
 </body>
 </html>

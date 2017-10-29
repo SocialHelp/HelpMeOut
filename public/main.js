@@ -1,11 +1,5 @@
-$(".chatButton").click(function(){
-	$('#modal').addClass("show");
-	
-})
-
-
 var socket;
-var currentTalkId;
+var currentTalkId = null;
 
 function generate_id() {
 	return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/x/g, function() {
@@ -28,11 +22,11 @@ $(function() {
 	});
 
 	socket.on('disconnect', function () {
-		console.log('you have been disconnected');
+		alert('you have been disconnected');
 	});
 
 	socket.on('reconnect', function () {
-		console.log('you have been reconnected');
+		alert('you have been reconnected');
 	});
 
 	socket.on('reconnect_error', function () {
@@ -56,15 +50,17 @@ $(function() {
 
 	socket.on('other side connected', function(talkid) {
 		currentTalkId = talkid;
-		console.log("Other side connected " + talkid);
+		alert("Other side connected " + talkid);
 	});
 
 	socket.on('other side disconnected', function(talkid) {
-		console.log("Other side disconnected " + talkid);
+		alert("Other side disconnected " + talkid);
 	});
 
     $(document).keypress(function(e) {
         if(e.which === 13) {
+	        if(currentTalkId === null)
+	        	return alert("You are not connected!");
             sendMessage(currentTalkId, $("#message-input").val());
             $("#message-input").val("")
         }
@@ -79,11 +75,6 @@ $(function() {
     });
 });
 
-<<<<<<< HEAD
-function joinCategory(categoryName)
-{
-	socket.emit('join category', categoryName);
-=======
 // Show typing indicator
 function addChatTyping(talkid) {
 	
@@ -127,7 +118,7 @@ function stopTyping(talkid) {
 
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {
-		console.log(status ? 'connected with an expert' : 'sorry, no experts available');
+		alert(status ? 'connected with an expert' : 'sorry, no experts available');
 		if(status)
 			console.log("Talkid: "+talkid);
 
@@ -137,7 +128,6 @@ function joinCategory(categoryName) {
 
 function joinAsExpert(categoryName) {
 	socket.emit('join expert', categoryName, function (status) {
-		console.log(status ? 'you have joined as an expert' : 'failed');
+		alert(status ? 'you have joined as an expert' : 'failed');
 	});
->>>>>>> be7091e4c47f4f1404105e1afc062764d57ce962
 }

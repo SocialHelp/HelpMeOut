@@ -110,6 +110,12 @@ h3 {
 	padding-bottom: 20vh;
 }
 
+/** process **/
+
+#process ul {
+	list-style-type: none;
+}
+
 #chat {
  /* For browsers that do not support gradients */
   height: 140vh;

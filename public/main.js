@@ -64,23 +64,15 @@ $(function() {
 	        if(currentTalkId === null)
 	        	return alert("You are not connected!");
             sendMessage(currentTalkId, $("#message-input").val());
-            $("#message-input").val("")
+            $("#message-input").val("");
         }
-    });
-
-    $( "#connect" ).click(function() {
-        joinCategory($("#message-input").val())
-    });
-
-    $( "#joinasexpert" ).click(function() {
-		joinAsExpert($("#message-input").val())
     });
 
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
 		console.log(category);
 		$("#questions").hide();
-		joinCategory(category);
+		(e.shiftKey?joinAsExpert:joinCategory)(category);
 	});
 });
 

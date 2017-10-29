@@ -205,6 +205,10 @@ function joinBuddy(categoryName) {
 				}
 
 				currentTalkId = talkid;
+
+                $(".active-tab").removeClass("active-tab");
+                $(".active").removeClass("active");
+                $("#chatlog-" + currentTalkId).addClass("active");
 			}
 		} else {
 			$(".question, #hidethistoo").show();

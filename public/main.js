@@ -1,5 +1,6 @@
 var socket;
 var currentTalkId = null;
+var activeConversations = [];
 
 function generate_id() {
 	return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/x/g, function() {
@@ -33,28 +34,19 @@ $(function() {
 		console.log('attempt to reconnect has failed');
 	});
 
-    socket.on('start typing', function (talkid) {
-    	console.log("User started typing "+talkid);
-        addChatTyping(talkid);
-    });
-
-    socket.on('stop typing', function (talkid) {
-        console.log("User stopped typing "+talkid);
-    	removeChatTyping(talkid);
-    });
-
     socket.on('new message', function (message) {
         console.log("New message: " + message.talkid + " " + message.message);
     	addChatMessage(message.talkid, message.message);
     });
 
 	socket.on('other side connected', function(talkid) {
-		currentTalkId = talkid;
-		alert("Other side connected " + talkid);
+		if (!(talkid in activeConversations)) {
+            activeConversations.push(talkid);
+            addTab(talkid);
+        }
 	});
 
 	socket.on('other side disconnected', function(talkid) {
-		alert("Other side disconnected " + talkid);
 		if (talkid === currentTalkId)
 			currentTalkId = null;
 	});
@@ -63,32 +55,21 @@ $(function() {
         if(e.which === 13) {
 	        if(currentTalkId === null)
 	        	return alert("You are not connected!");
-            sendMessage(currentTalkId, $("#message-input").val());
+            sendMessage(currentTalkId, $("#message-input").val()); // TODO: Sprawdź czy podłączone
             $("#message-input").val("");
         }
     });
 
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
-		console.log(category);
 		$("#questions").hide();
 		(e.shiftKey?joinAsExpert:joinCategory)(category);
 	});
 });
 
-// Show typing indicator
-function addChatTyping(talkid) {
-	
-}
-
-// Removes typing indicator
-function removeChatTyping(talkid) {
-
-}
-
 // This adds message to the chat log
 function addChatMessage(talkid, message) {
-	$("#chatlog").append("<div class=\"row message-remote-row\">\n" +
+	$("#chatlog-"+talkid).append("<div class=\"row message-remote-row\">\n" +
 		"                <div class=\"message\">\n" +
 		"                    " + message + "\n" +
 		"                </div>\n" +
@@ -96,26 +77,44 @@ function addChatMessage(talkid, message) {
 }
 
 function addLocalChatMessage(message) {
-    $("#chatlog").append("<div class=\"row message-my-row\">\n" +
+	console.log("Chat message sent: " + message + " " + currentTalkId);
+    $("#chatlog-"+currentTalkId).append("<div class=\"row message-my-row\">\n" +
         "                <div class=\"message message-my\">\n" +
         "                    " + message + "\n" +
         "                </div>\n" +
         "            </div>")
 }
 
+function addTab(talkid) {
+    $("#conversations-tabs").append(
+        "        <li class=\"nav-item\">\n" +
+        "            <a class=\"conversation-tab nav-link\" data-tab-id=\"" + talkid + "\" href=\"#\">" + talkid + "</a>" +
+        "        </li>\n");
+
+    $("#chat-logs").append("<div class='tab' id=\"chatlog-" + talkid + "\">\n" +
+        "\n" +
+        "</div>");
+
+    $(".conversation-tab[data-tab-id='"+talkid+"']").click(function (e) {
+        currentTalkId = e.target.dataset.tabId;
+        $(".active-tab").removeClass("active-tab");
+        $(".active").removeClass("active");
+        $(e.target).addClass("active");
+
+        $("#chatlog-"+currentTalkId).addClass("active-tab");
+    });
+
+    if (currentTalkId === null) {
+        currentTalkId = talkid;
+        $(".conversation-tab[data-tab-id='"+talkid+"']").addClass("active");
+        $("#chatlog-"+talkid).addClass("active-tab");
+    }
+}
+
 function sendMessage(talkid, message) {
     socket.emit('new message', {talkid: talkid, message: message});
     addLocalChatMessage(message);
 }
-
-function startTyping(talkid) {
-	socket.emit('start typing', talkid);
-}
-
-function stopTyping(talkid) {
-	socket.emit('stop typing', talkid);
-}
-
 
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {
@@ -129,8 +128,12 @@ function joinCategory(categoryName) {
 			$("#status").html("?");
 		}
 
-		if(status)
-			console.log("Talkid: "+talkid);
+		if(status) {
+            if (!(talkid in activeConversations)) {
+                activeConversations.push(talkid);
+                addTab(talkid);
+            }
+        }
 		else
 			alert('sorry, no experts available');
 

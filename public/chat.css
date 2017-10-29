@@ -23,6 +23,13 @@ body {
 }
 
 #chatlog {
-    overflow: auto;
-   /* max-height: 100vh;*/
+    max-height: 100vh;
+}
+
+.tab {
+    display: none;
+}
+
+.active-tab {
+    display: block;
 }

@@ -51,18 +51,16 @@ $(function() {
 		console.log(conversation);
 
         if (conversation == undefined || !conversation.active) {
-        	console.log(currentTalkId);
-        	console.log(conversation);
             if (!$("#chatlog-"+talkid).length) {
             	conversation = {id: talkid, active: true};
                 activeConversations.push(conversation);
                 addTab(talkid);
-            } else if (conversation.id == currentTalkId) {
+            } else if (conversation.id != undefined && conversation.id == currentTalkId) {
                 $("#message-input").prop("disabled", false);
                 $("#message-input").val("");
 			} else if (currentTalkId === null) {
-            	console.log("ppp");
 				currentTalkId = talkid;
+                $(".conversation-tab[data-tab-id='"+talkid+"']").addClass("active");
                 $("#message-input").prop("disabled", false);
                 $("#message-input").val("");
             }

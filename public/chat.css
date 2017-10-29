@@ -21,3 +21,8 @@ body {
 .message-my-row {
     justify-content: flex-end;
 }
+
+#chatlog {
+    overflow: auto;
+    max-height: 100vh;
+}

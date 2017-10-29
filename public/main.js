@@ -8,8 +8,8 @@ function generate_id() {
 	});
 }
 
-//TODO: localStorage.user_id = localStorage.user_id || generate_id();
-localStorage.user_id = generate_id();
+localStorage.user_id = localStorage.user_id || generate_id();
+//localStorage.user_id = generate_id();
 
 $(function() {
 	console.log("Hello!");
@@ -44,15 +44,37 @@ $(function() {
 			$("#status").html($("#status").html().replace("Waiting for", "Connected with"));
 		}
 
-		if (!(talkid in activeConversations)) {
-            activeConversations.push(talkid);
-            addTab(talkid);
+		var conversation = activeConversations.filter(function( obj ) {
+            return obj.id == talkid;
+        })[0];
+
+		console.log(conversation);
+
+        if (conversation == undefined || !conversation.active) {
+            if (!$("#chatlog-"+talkid).length) {
+            	conversation = {id: talkid, active: true};
+                activeConversations.push(conversation);
+                addTab(talkid);
+            } else if (conversation.id != undefined && conversation.id == currentTalkId) {
+                $("#message-input").prop("disabled", false);
+                $("#message-input").val("");
+			} else if (currentTalkId === null) {
+				currentTalkId = talkid;
+                $(".conversation-tab[data-tab-id='"+talkid+"']").addClass("active");
+                $("#message-input").prop("disabled", false);
+                $("#message-input").val("");
+            }
+            conversation.active = true;
         }
 	});
 
 	socket.on('other side disconnected', function(talkid) {
-		if (talkid === currentTalkId)
-			currentTalkId = null;
+    	activeConversations.find(function (obj) { return obj.id === talkid; }).active = false;
+		if (talkid === currentTalkId) {
+            currentTalkId = null;
+            $("#message-input").prop("disabled", true);
+            $("#message-input").val("Rozmówca jest rozłączony");
+        }
 	});
 
     $(document).keypress(function(e) {
@@ -66,7 +88,7 @@ $(function() {
 
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
-		$("#questions").hide();
+		$(".question").hide();
 		(!e.ctrlKey?e.shiftKey?joinAsExpert:joinCategory:joinBuddy)(category);
 	});
 });
@@ -105,6 +127,10 @@ function addTab(talkid) {
         $(".active").removeClass("active");
         $(e.target).addClass("active");
 
+        var status = !activeConversations.find(function (obj) { return obj.id === talkid; }).active;
+        $("#message-input").prop("disabled", status);
+
+		$("#message-input").val(status ? "Rozmówca jest rozłączony" : "");
         $("#chatlog-"+currentTalkId).addClass("active-tab");
     });
 
@@ -123,22 +149,23 @@ function sendMessage(talkid, message) {
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {
 		if(status) {
-			$("#questions").hide();
+			$(".question").hide();
 			$("#chatRoom").show();
 			$("#status").html("Connected with an expert in category: <b>"+categoryName+"</b>");
 		} else {
-			$("#questions").show();
+			$(".question").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 		}
 
 		if(status) {
-            if (!(talkid in activeConversations)) {
-                activeConversations.push(talkid);
+            if (!activeConversations.filter(function( obj ) {
+                return obj.id == talkid;
+            }).active) {
+                activeConversations.push({id: talkid, active: true});
                 addTab(talkid);
             }
-        }
-		else
+        } else
 			alert('sorry, no experts available');
 
         currentTalkId = talkid;
@@ -148,11 +175,11 @@ function joinCategory(categoryName) {
 function joinAsExpert(categoryName) {
 	socket.emit('join expert', categoryName, function (status) {
 		if(status) {
-			$("#questions").hide();
+			$(".question").hide();
 			$("#chatRoom").show();
 			$("#status").html("You are an expert in category: <b>"+categoryName+"</b>");
 		} else {
-			$("#questions").show();
+			$(".question").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 			alert('failed');
@@ -163,7 +190,7 @@ function joinAsExpert(categoryName) {
 function joinBuddy(categoryName) {
 	socket.emit('join buddy talk', categoryName, function(status, talkid) {
 		if(status) {
-			$("#questions").hide();
+			$(".question").hide();
 			$("#chatRoom").show();
 			$("#status").html((talkid !== null ? "Connected with" : "Waiting for") + " a buddy in category: <b>"+categoryName+"</b>");
 
@@ -176,7 +203,7 @@ function joinBuddy(categoryName) {
 				currentTalkId = talkid;
 			}
 		} else {
-			$("#questions").show();
+			$(".question").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 			alert('error');

@@ -4,6 +4,10 @@ background-color: #f7f7f7;
 font-family: "Source Sans Pro", sans-serif;
 }
 
+@import "font-awesome.min.css";
+@import "font-awesome-ie7.min.css";
+
+
 h1 {
 	margin: auto;
 	margin-top: 10%;
@@ -109,14 +113,32 @@ h3 {
 }
 
 /** process **/
+#process {
+	background: #f7f7f7;
+}
 
 #process ul {
 	list-style-type: none;
+	margin-top: 20px;
 }
 
 #chat {
  /* For browsers that do not support gradients */
-  height: 140vh;
+  height: 50vh;
+}
+
+#chat ul li {
+	text-align: center;
+}
+
+#chat ul li i {
+	text-align: center;
+}
+
+.icon {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	text-align: center;
 }
 
 #chat h2 {

@@ -1,5 +1,4 @@
-@import "font-awesome.min.css";
-@import "font-awesome-ie7.min.css";
+@import url('https://fonts.googleapis.com/css?family=Cantata+One|Source+Sans+Pro');
 /* Space out content a bit */
 html body {
 background-color: #f7f7f7;

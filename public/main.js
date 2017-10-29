@@ -162,11 +162,11 @@ function sendMessage(talkid, message) {
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {
 		if(status) {
-			$(".question").hide();
+			$(".question, #hidethistoo").hide();
 			$("#chatRoom").show();
 			$("#status").html("Connected with an expert in category: <b>"+categoryName+"</b>");
 		} else {
-			$(".question").show();
+			$(".question, #hidethistoo").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 		}
@@ -188,11 +188,11 @@ function joinCategory(categoryName) {
 function joinAsExpert(categoryName) {
 	socket.emit('join expert', categoryName, function (status) {
 		if(status) {
-			$(".question").hide();
+			$(".question, #hidethistoo").hide();
 			$("#chatRoom").show();
 			$("#status").html("You are an expert in category: <b>"+categoryName+"</b>");
 		} else {
-			$(".question").show();
+			$(".question, #hidethistoo").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 			alert('failed');
@@ -203,7 +203,7 @@ function joinAsExpert(categoryName) {
 function joinBuddy(categoryName) {
 	socket.emit('join buddy talk', categoryName, function(status, talkid) {
 		if(status) {
-			$(".question").hide();
+			$(".question, #hidethistoo").hide();
 			$("#chatRoom").show();
 			$("#status").html((talkid !== null ? "Connected with" : "Waiting for") + " a buddy in category: <b>"+categoryName+"</b>");
 
@@ -216,7 +216,7 @@ function joinBuddy(categoryName) {
 				currentTalkId = talkid;
 			}
 		} else {
-			$(".question").show();
+			$(".question, #hidethistoo").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 			alert('error');

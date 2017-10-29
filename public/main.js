@@ -8,8 +8,8 @@ function generate_id() {
 	});
 }
 
-//TODO: localStorage.user_id = localStorage.user_id || generate_id();
-localStorage.user_id = generate_id();
+localStorage.user_id = localStorage.user_id || generate_id();
+//localStorage.user_id = generate_id();
 
 $(function() {
 	console.log("Hello!");
@@ -44,15 +44,39 @@ $(function() {
 			$("#status").html($("#status").html().replace("Waiting for", "Connected with"));
 		}
 
-		if (!(talkid in activeConversations)) {
-            activeConversations.push(talkid);
-            addTab(talkid);
+		var conversation = activeConversations.filter(function( obj ) {
+            return obj.id == talkid;
+        })[0];
+
+		console.log(conversation);
+
+        if (conversation == undefined || !conversation.active) {
+        	console.log(currentTalkId);
+        	console.log(conversation);
+            if (!$("#chatlog-"+talkid).length) {
+            	conversation = {id: talkid, active: true};
+                activeConversations.push(conversation);
+                addTab(talkid);
+            } else if (conversation.id == currentTalkId) {
+                $("#message-input").prop("disabled", false);
+                $("#message-input").val("");
+			} else if (currentTalkId === null) {
+            	console.log("ppp");
+				currentTalkId = talkid;
+                $("#message-input").prop("disabled", false);
+                $("#message-input").val("");
+            }
+            conversation.active = true;
         }
 	});
 
 	socket.on('other side disconnected', function(talkid) {
-		if (talkid === currentTalkId)
-			currentTalkId = null;
+    	activeConversations.find(function (obj) { return obj.id === talkid; }).active = false;
+		if (talkid === currentTalkId) {
+            currentTalkId = null;
+            $("#message-input").prop("disabled", true);
+            $("#message-input").val("Rozmówca jest rozłączony");
+        }
 	});
 
     $(document).keypress(function(e) {
@@ -105,6 +129,10 @@ function addTab(talkid) {
         $(".active").removeClass("active");
         $(e.target).addClass("active");
 
+        var status = !activeConversations.find(function (obj) { return obj.id === talkid; }).active;
+        $("#message-input").prop("disabled", status);
+
+		$("#message-input").val(status ? "Rozmówca jest rozłączony" : "");
         $("#chatlog-"+currentTalkId).addClass("active-tab");
     });
 
@@ -133,12 +161,13 @@ function joinCategory(categoryName) {
 		}
 
 		if(status) {
-            if (!(talkid in activeConversations)) {
-                activeConversations.push(talkid);
+            if (!activeConversations.filter(function( obj ) {
+                return obj.id == talkid;
+            }).active) {
+                activeConversations.push({id: talkid, active: true});
                 addTab(talkid);
             }
-        }
-		else
+        } else
 			alert('sorry, no experts available');
 
         currentTalkId = talkid;

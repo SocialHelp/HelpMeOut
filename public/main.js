@@ -66,7 +66,7 @@ $(function() {
 
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
-		$("#questions").hide();
+		$(".question").hide();
 		(!e.ctrlKey?e.shiftKey?joinAsExpert:joinCategory:joinBuddy)(category);
 	});
 });
@@ -123,11 +123,11 @@ function sendMessage(talkid, message) {
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {
 		if(status) {
-			$("#questions").hide();
+			$(".question").hide();
 			$("#chatRoom").show();
 			$("#status").html("Connected with an expert in category: <b>"+categoryName+"</b>");
 		} else {
-			$("#questions").show();
+			$(".question").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 		}
@@ -148,11 +148,11 @@ function joinCategory(categoryName) {
 function joinAsExpert(categoryName) {
 	socket.emit('join expert', categoryName, function (status) {
 		if(status) {
-			$("#questions").hide();
+			$(".question").hide();
 			$("#chatRoom").show();
 			$("#status").html("You are an expert in category: <b>"+categoryName+"</b>");
 		} else {
-			$("#questions").show();
+			$(".question").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 			alert('failed');
@@ -163,7 +163,7 @@ function joinAsExpert(categoryName) {
 function joinBuddy(categoryName) {
 	socket.emit('join buddy talk', categoryName, function(status, talkid) {
 		if(status) {
-			$("#questions").hide();
+			$(".question").hide();
 			$("#chatRoom").show();
 			$("#status").html((talkid !== null ? "Connected with" : "Waiting for") + " a buddy in category: <b>"+categoryName+"</b>");
 
@@ -176,7 +176,7 @@ function joinBuddy(categoryName) {
 				currentTalkId = talkid;
 			}
 		} else {
-			$("#questions").show();
+			$(".question").show();
 			$("#chatRoom").hide();
 			$("#status").html("?");
 			alert('error');

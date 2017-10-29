@@ -1,6 +1,7 @@
 var socket;
 var currentTalkId = null;
 var activeConversations = [];
+var specialist = false;
 
 function generate_id() {
 	return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/x/g, function() {
@@ -9,7 +10,6 @@ function generate_id() {
 }
 
 localStorage.user_id = localStorage.user_id || generate_id();
-//localStorage.user_id = generate_id();
 
 $(function() {
 	console.log("Hello!");
@@ -19,7 +19,18 @@ $(function() {
 	socket.on('connect', function () {
 		console.log('Connected');
 
-		socket.emit('login', localStorage.user_id, function(status){});
+		socket.emit('login', localStorage.user_id, function(status, userdata){
+			specialist = (userdata != null);
+			if(!userdata)
+				return;
+
+			console.log(userdata);
+			for(var x in userdata) {
+				$("input[name='"+x+"']").val(userdata[x]);
+			}
+
+			$("#specialist").show();
+		});
 	});
 
 	socket.on('disconnect', function () {
@@ -89,8 +100,10 @@ $(function() {
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
 		$(".question").hide();
-		(!e.ctrlKey?e.shiftKey?joinAsExpert:joinCategory:joinBuddy)(category);
+		(!e.ctrlKey?specialist?joinAsExpert:joinCategory:joinBuddy)(category);
 	});
+
+	$("form").submit(register);
 });
 
 // This adds message to the chat log
@@ -209,4 +222,16 @@ function joinBuddy(categoryName) {
 			alert('error');
 		}
 	});
+}
+
+function register() {
+	var data = $("form").serializeArray().reduce(function(obj, item) {
+		obj[item.name] = item.value;
+		return obj;
+	}, {});
+	console.log(data);
+	socket.emit('register', data, function(ok) {
+		alert(ok ? 'Information saved succesfully' : 'Error');
+	});
+	return false;
 }

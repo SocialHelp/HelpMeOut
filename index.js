@@ -13,16 +13,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var talks = [];
 var buddyTalkQueue = {};
+var registered_users = {};
 
 io.on('connection', function (socket) {
 	console.log("%s connected", socket.id);
 
 	socket.on('login', function(user_id, callback) {
 		if (socket.user_id) // Already logged in?
-			return callback(false);
+			return callback(false, null);
 		socket.user_id = user_id;
 		socket.user_type = null;
 		console.log("%s logged in as %s", socket.id, socket.user_id);
+		return callback(true, socket.user_id in registered_users ? registered_users[socket.user_id] : null);
+	});
+
+	socket.on('register', function(data, callback) {
+		if (!socket.user_id) // Not logged in?
+			return callback(false);
+		registered_users[socket.user_id] = data;
+		console.log(socket.user_id, registered_users[socket.user_id]);
 		return callback(true);
 	});
 
@@ -83,6 +92,8 @@ io.on('connection', function (socket) {
 
 	socket.on('join expert', function(categoryName, callback) {
 		if (!socket.user_id) // Not logged in?
+			return callback(false);
+		if (!(socket.user_id in registered_users)) // Not registered?
 			return callback(false);
 		if (socket.user_type && socket.user_type != 'expert') // Already chatting as an user?
 			return callback(false);
@@ -152,6 +163,8 @@ io.on('connection', function (socket) {
 
 	socket.on('new message', function (message) {
 		console.log("New message in talk %d: %s", message.talkid, message.message);
+		if (socket.user_id in registered_users)
+			message.user_data = registered_users[socket.user_id];
 		socket.to("talk"+message.talkid).emit('new message', message);
 	});
 });

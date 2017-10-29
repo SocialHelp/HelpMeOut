@@ -12,6 +12,7 @@ server.listen(port, function () {
 app.use(express.static(path.join(__dirname, 'public')));
 
 var talks = [];
+var buddyTalkQueue = {};
 
 io.on('connection', function (socket) {
 	console.log("%s connected", socket.id);
@@ -36,7 +37,7 @@ io.on('connection', function (socket) {
 		for(var i = 0; i < talks.length; i++) {
 			if(talks[i].user == socket.user_id && talks[i].category == categoryName) {
 				Object.keys(io.sockets.sockets).map(function (key) { return io.sockets.sockets[key]; }).forEach(function (s) {
-					if(talks[i].expert == s.user_id) {
+					if('expert' in talks[i] && talks[i].expert == s.user_id) {
 						expert = s;
 					}
 				});
@@ -51,7 +52,7 @@ io.on('connection', function (socket) {
 		if(!talk) {
 			Object.keys(io.sockets.sockets).map(function (key) { return io.sockets.sockets[key]; }).forEach(function (s) {
 				if (s.user_type == 'expert') {
-					if (s.expert_categories.indexOf(categoryName) !== -1) {
+					if (s.categories.indexOf(categoryName) !== -1) {
 						expert = s;
 					}
 				}
@@ -87,14 +88,52 @@ io.on('connection', function (socket) {
 			return callback(false);
 
 		socket.user_type = 'expert';
-		if(!socket.expert_categories)
-			socket.expert_categories = [];
-		if(socket.expert_categories.indexOf(categoryName) !== -1) // Already registered for a category
+		if(!socket.categories)
+			socket.categories = [];
+		if(socket.categories.indexOf(categoryName) !== -1) // Already registered for a category
 			return callback(false);
-		socket.expert_categories.push(categoryName);
+		socket.categories.push(categoryName);
 
 		console.log("%s is waiting on category %s", socket.user_id, categoryName);
 		return callback(true);
+	});
+	
+	socket.on('join buddy talk', function(categoryName, callback) {
+		if (!socket.user_id) // Not logged in?
+			return callback(false);
+		if (socket.user_type) // Already chatting as an user?
+			return callback(false);
+		for (var cat in buddyTalkQueue)
+			if (buddyTalkQueue[cat].indexOf(socket) !== -1) // Already in a queue?
+				return callback(false);
+
+		socket.user_type = 'buddy talk';
+
+		if (!(categoryName in buddyTalkQueue))
+			buddyTalkQueue[categoryName] = [];
+		if (buddyTalkQueue[categoryName].length == 0) {
+			buddyTalkQueue[categoryName].push(socket);
+			console.log("%s is waiting on category %s for buddy talk", socket.user_id, categoryName);
+
+			return callback(true, null);
+		} else {
+			var expert = buddyTalkQueue[categoryName].pop();
+			var talk = {};
+			talk.user = socket.user_id;
+			talk.user2 = expert.user_id;
+			talk.category = categoryName;
+			var talkid = talks.push(talk) - 1;
+
+
+			console.log("Started new buddy talk ID:%d %s with %s in category %s", talkid, socket.user_id, expert.user_id, categoryName);
+
+			socket.join("talk"+talkid);
+			expert.join("talk"+talkid);
+
+			expert.emit('other side connected', talkid);
+
+			return callback(true, talkid);
+		}
 	});
 
 	socket.on('disconnecting', function() { // Because room list is unavailable in 'disconnected'
@@ -114,13 +153,5 @@ io.on('connection', function (socket) {
 	socket.on('new message', function (message) {
 		console.log("New message in talk %d: %s", message.talkid, message.message);
 		socket.to("talk"+message.talkid).emit('new message', message);
-	});
-
-	socket.on('start typing', function (talkid) {
-		socket.to("talk"+talkid).emit('start typing', talkid);
-	});
-
-	socket.on('stop typing', function (talkid) {
-		socket.to("talk"+talkid).emit('stop typing', talkid);
 	});
 });

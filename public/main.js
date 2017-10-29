@@ -40,6 +40,10 @@ $(function() {
     });
 
 	socket.on('other side connected', function(talkid) {
+		if ($("#status").html().indexOf("buddy") !== -1) { // TODO: a terrible hack (yeah!)
+			$("#status").html($("#status").html().replace("Waiting for", "Connected with"));
+		}
+
 		if (!(talkid in activeConversations)) {
             activeConversations.push(talkid);
             addTab(talkid);
@@ -63,7 +67,7 @@ $(function() {
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
 		$("#questions").hide();
-		(e.shiftKey?joinAsExpert:joinCategory)(category);
+		(!e.ctrlKey?e.shiftKey?joinAsExpert:joinCategory:joinBuddy)(category);
 	});
 });
 
@@ -152,6 +156,30 @@ function joinAsExpert(categoryName) {
 			$("#chatRoom").hide();
 			$("#status").html("?");
 			alert('failed');
+		}
+	});
+}
+
+function joinBuddy(categoryName) {
+	socket.emit('join buddy talk', categoryName, function(status, talkid) {
+		if(status) {
+			$("#questions").hide();
+			$("#chatRoom").show();
+			$("#status").html((talkid !== null ? "Connected with" : "Waiting for") + " a buddy in category: <b>"+categoryName+"</b>");
+
+			if(talkid != null) {
+				if (!(talkid in activeConversations)) {
+					activeConversations.push(talkid);
+					addTab(talkid);
+				}
+
+				currentTalkId = talkid;
+			}
+		} else {
+			$("#questions").show();
+			$("#chatRoom").hide();
+			$("#status").html("?");
+			alert('error');
 		}
 	});
 }

@@ -88,15 +88,6 @@ $(function() {
         }
 	});
 
-    $(document).keypress(function(e) {
-        if(e.which === 13) {
-	        if(currentTalkId === null)
-	        	return alert("You are not connected!");
-            sendMessage(currentTalkId, $("#message-input").val()); // TODO: Sprawdź czy podłączone
-            $("#message-input").val("");
-        }
-    });
-
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
 		$(".question").hide();

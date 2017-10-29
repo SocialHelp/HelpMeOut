@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Cantata+One|Source+Sans+Pro');
+@import url('//fonts.googleapis.com/css?family=Cantata+One|Source+Sans+Pro');
 /* Space out content a bit */
 html body {
 background-color: #f7f7f7;
@@ -27,6 +27,11 @@ font-family: "Source Sans Pro", sans-serif;
 #top .nav-link:hover {
   text-decoration: underline;
 }
+
+.container {
+  margin-top: 100px;
+  text-align: center;
+}
 /* Customize container */
 @media (min-width: 768px) {
   .container {
@@ -38,9 +43,10 @@ font-family: "Source Sans Pro", sans-serif;
 
 .d-flex {
   margin-top: 25px;
+
   text-align: center;
+
 }
- 
 .container label {
   margin-top: 25px;
 

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Cantata+One|Source+Sans+Pro');
+@import url('//fonts.googleapis.com/css?family=Cantata+One|Source+Sans+Pro');
 /* Space out content a bit */
 html body {
 background-color: #f7f7f7;
@@ -39,7 +39,6 @@ font-family: "Source Sans Pro", sans-serif;
 .container button {
   margin-top: 25px;
   display: flex;
-  justify-content: 
 }
  
 .container label {

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 
+<<<<<<< Updated upstream
 html body {
 background-color: #f7f7f7;
 font-family: "Source Sans Pro", sans-serif;
@@ -22,12 +23,11 @@ h1 {
 .element {
 	position: relative;
 	display: inline-block;
-	height: 100%;
 }
 
-.element p {
+.overlay {
 	width: 100%;
-	height: 100%;
+	
 	text-align: center;
 	position: absolute;
 	bottom: 0px;
@@ -41,21 +41,25 @@ h1 {
 }
 
 
-.element p {
+.overlay {
 	margin-left: -10000px;
 	text-align: center;
 
 }
 
-.element:hover p{
+.element:hover .overlay{
 	margin-left: 0;
 }
 
+.overlay p {
+	margin-top: 15%;
+}
+
 .container img {
-	width: 100%;
-	height: 100%;	
+	width: 100%;	
 	object-fit: cover;
 	border-radius: 10px;
+	margin-bottom: 15px;
 }
 h3 {
 	margin-top: 20px;
@@ -68,6 +72,8 @@ h3 {
 	background-color: #fff;
 	font-size: 16px;
 }
+
+
 
 /** Top **/
 

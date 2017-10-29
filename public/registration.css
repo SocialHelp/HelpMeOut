@@ -1,58 +1,56 @@
 @import "font-awesome.min.css";
 @import "font-awesome-ie7.min.css";
 /* Space out content a bit */
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+html body {
+background-color: #f7f7f7;
+font-family: "Source Sans Pro", sans-serif;
+}
+.title {
+    font-family: "Cantata One", sans-serif;
+    color: #f7f7f7;
+    background:#212428;
+    height: 5vh;
+    padding: 3px;
+}
+.navbar {
+  background: #5FBA30;
+  height: 5vh;
 }
 
-.navAbout {
-  height: 30px !important;
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
 }
 
-.navAbout .title {
-  font-size: 7px;
-  margin-left: -10px;
+.nav-item {
+  margin-left: 30px;
 }
 
-.navAbout li {
-    font-size: 6px;
-    margin-right: -10px;
+#top .nav-link:hover {
+  text-decoration: underline;
 }
-
-.navAbout li:last-child {
-  margin-right: -8px;
-  margin-right: -13px;
-}
-
 /* Customize container */
 @media (min-width: 768px) {
   .container {
-    max-width: 730px;
-  }
-}
-.container-narrow > hr {
-  margin: 30px 0;
-}
-
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-}
-.jumbotron .btn {
-  padding: 14px 24px;
-  font-size: 21px;
-}
-
-  
-  
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
+    max-width: 750px;
   }
 }
 
-.btn-info {
-  margin-top: 10px;
+
+.container button {
+  margin-top: 25px;
 }
+ 
+.container label {
+  margin-top: 25px;
+ 
+  display: -webkit-flex; /* Safari */
+    -webkit-justify-content: space-around; /* Safari 6.1+ */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .container h1 {
+    text-align: center;
+  }

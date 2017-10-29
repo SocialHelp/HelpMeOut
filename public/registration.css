@@ -27,6 +27,11 @@ font-family: "Source Sans Pro", sans-serif;
 #top .nav-link:hover {
   text-decoration: underline;
 }
+
+.container {
+  margin-top: 100px;
+  text-align: center;
+}
 /* Customize container */
 @media (min-width: 768px) {
   .container {

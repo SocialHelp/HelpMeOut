@@ -1,6 +1,7 @@
 var socket;
 var currentTalkId = null;
 var activeConversations = [];
+var specialist = false;
 
 function generate_id() {
 	return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/x/g, function() {
@@ -8,8 +9,7 @@ function generate_id() {
 	});
 }
 
-//TODO: localStorage.user_id = localStorage.user_id || generate_id();
-localStorage.user_id = generate_id();
+localStorage.user_id = localStorage.user_id || generate_id();
 
 $(function() {
 	console.log("Hello!");
@@ -19,7 +19,18 @@ $(function() {
 	socket.on('connect', function () {
 		console.log('Connected');
 
-		socket.emit('login', localStorage.user_id, function(status){});
+		socket.emit('login', localStorage.user_id, function(status, userdata){
+			specialist = (userdata != null);
+			if(!userdata)
+				return;
+
+			console.log(userdata);
+			for(var x in userdata) {
+				$("input[name='"+x+"']").val(userdata[x]);
+			}
+
+			$("#specialist").show();
+		});
 	});
 
 	socket.on('disconnect', function () {
@@ -44,15 +55,37 @@ $(function() {
 			$("#status").html($("#status").html().replace("Waiting for", "Connected with"));
 		}
 
-		if (!(talkid in activeConversations)) {
-            activeConversations.push(talkid);
-            addTab(talkid);
+		var conversation = activeConversations.filter(function( obj ) {
+            return obj.id == talkid;
+        })[0];
+
+		console.log(conversation);
+
+        if (conversation == undefined || !conversation.active) {
+            if (!$("#chatlog-"+talkid).length) {
+            	conversation = {id: talkid, active: true};
+                activeConversations.push(conversation);
+                addTab(talkid);
+            } else if (conversation.id != undefined && conversation.id == currentTalkId) {
+                $("#message-input").prop("disabled", false);
+                $("#message-input").val("");
+			} else if (currentTalkId === null) {
+				currentTalkId = talkid;
+                $(".conversation-tab[data-tab-id='"+talkid+"']").addClass("active");
+                $("#message-input").prop("disabled", false);
+                $("#message-input").val("");
+            }
+            conversation.active = true;
         }
 	});
 
 	socket.on('other side disconnected', function(talkid) {
-		if (talkid === currentTalkId)
-			currentTalkId = null;
+    	activeConversations.find(function (obj) { return obj.id === talkid; }).active = false;
+		if (talkid === currentTalkId) {
+            currentTalkId = null;
+            $("#message-input").prop("disabled", true);
+            $("#message-input").val("Rozmówca jest rozłączony");
+        }
 	});
 
     $(document).keypress(function(e) {
@@ -67,8 +100,10 @@ $(function() {
 	$(".question").click(function(e) {
 		var category = e.target.innerText;
 		$(".question").hide();
-		(!e.ctrlKey?e.shiftKey?joinAsExpert:joinCategory:joinBuddy)(category);
+		(!e.ctrlKey?specialist?joinAsExpert:joinCategory:joinBuddy)(category);
 	});
+
+	$("form").submit(register);
 });
 
 // This adds message to the chat log
@@ -105,6 +140,10 @@ function addTab(talkid) {
         $(".active").removeClass("active");
         $(e.target).addClass("active");
 
+        var status = !activeConversations.find(function (obj) { return obj.id === talkid; }).active;
+        $("#message-input").prop("disabled", status);
+
+		$("#message-input").val(status ? "Rozmówca jest rozłączony" : "");
         $("#chatlog-"+currentTalkId).addClass("active-tab");
     });
 
@@ -133,12 +172,13 @@ function joinCategory(categoryName) {
 		}
 
 		if(status) {
-            if (!(talkid in activeConversations)) {
-                activeConversations.push(talkid);
+            if (!activeConversations.filter(function( obj ) {
+                return obj.id == talkid;
+            }).active) {
+                activeConversations.push({id: talkid, active: true});
                 addTab(talkid);
             }
-        }
-		else
+        } else
 			alert('sorry, no experts available');
 
         currentTalkId = talkid;
@@ -182,4 +222,16 @@ function joinBuddy(categoryName) {
 			alert('error');
 		}
 	});
+}
+
+function register() {
+	var data = $("form").serializeArray().reduce(function(obj, item) {
+		obj[item.name] = item.value;
+		return obj;
+	}, {});
+	console.log(data);
+	socket.emit('register', data, function(ok) {
+		alert(ok ? 'Information saved succesfully' : 'Error');
+	});
+	return false;
 }

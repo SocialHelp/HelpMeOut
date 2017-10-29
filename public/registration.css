@@ -36,10 +36,9 @@ font-family: "Source Sans Pro", sans-serif;
 
 
 
-.container button {
+.d-flex {
   margin-top: 25px;
-  display: flex;
-  justify-content: 
+  text-align: center;
 }
  
 .container label {
@@ -58,3 +57,6 @@ font-family: "Source Sans Pro", sans-serif;
 
   }
   
+  .container {
+    margin-top: 20px;
+  }

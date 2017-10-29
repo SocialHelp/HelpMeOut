@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 
-
 html body {
 background-color: #f7f7f7;
 font-family: "Source Sans Pro", sans-serif;
@@ -64,7 +63,6 @@ h1 {
 	width: 100%;	
 	object-fit: cover;
 	border-radius: 10px;
-	margin-bottom: 15px;
 }
 h3 {
 	margin-top: 20px;

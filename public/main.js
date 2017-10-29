@@ -55,6 +55,8 @@ $(function() {
 
 	socket.on('other side disconnected', function(talkid) {
 		alert("Other side disconnected " + talkid);
+		if (talkid === currentTalkId)
+			currentTalkId = null;
 	});
 
     $(document).keypress(function(e) {
@@ -73,6 +75,13 @@ $(function() {
     $( "#joinasexpert" ).click(function() {
 		joinAsExpert($("#message-input").val())
     });
+
+	$(".question").click(function(e) {
+		var category = e.target.innerText;
+		console.log(category);
+		$("#questions").hide();
+		joinCategory(category);
+	});
 });
 
 // Show typing indicator
@@ -118,9 +127,20 @@ function stopTyping(talkid) {
 
 function joinCategory(categoryName) {
 	socket.emit('join category', categoryName, function(status, talkid) {
-		alert(status ? 'connected with an expert' : 'sorry, no experts available');
+		if(status) {
+			$("#questions").hide();
+			$("#chatRoom").show();
+			$("#status").html("Connected with an expert in category: <b>"+categoryName+"</b>");
+		} else {
+			$("#questions").show();
+			$("#chatRoom").hide();
+			$("#status").html("?");
+		}
+
 		if(status)
 			console.log("Talkid: "+talkid);
+		else
+			alert('sorry, no experts available');
 
         currentTalkId = talkid;
 	});
@@ -128,6 +148,15 @@ function joinCategory(categoryName) {
 
 function joinAsExpert(categoryName) {
 	socket.emit('join expert', categoryName, function (status) {
-		alert(status ? 'you have joined as an expert' : 'failed');
+		if(status) {
+			$("#questions").hide();
+			$("#chatRoom").show();
+			$("#status").html("You are an expert in category: <b>"+categoryName+"</b>");
+		} else {
+			$("#questions").show();
+			$("#chatRoom").hide();
+			$("#status").html("?");
+			alert('failed');
+		}
 	});
 }
